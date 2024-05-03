@@ -1,0 +1,31 @@
+version: "3.8"
+
+services:
+  db:
+    image: mysql:latest
+    command: --default-authentication-plugin=mysql_native_password
+    container_name : rbac_db
+    restart: always
+    environment:
+      - MYSQL_ROOT_PASSWORD=amir2240097
+    networks:
+      - my_network
+    volumes:
+      - sql:/val/lib/mysql
+
+  backend:
+    image: amiramarloo/rbac:1.0.0
+    ports:
+      - 3100:3100
+    depends_on:
+      - db
+    links : 
+      - db
+    networks:
+      - my_network
+networks:
+  my_network:
+    driver : bridge
+volumes:
+  sql:
+    driver: local
